@@ -11,7 +11,7 @@ export default function page() {
   return (
     <Hero 
       image="/R0002997.jpg"
-      title="Happy Chinese New Year Eve"
+      title="新年快乐，蛇年大吉"
     />
   )
 }
