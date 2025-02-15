@@ -1,11 +1,6 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect } from 'react'
-// 需要先安装 framer-motion 依赖
-// 运行: npm install framer-motion
-// 或者: yarn add framer-motion
-import { motion } from 'framer-motion'
 
 export default function NotFound() {
     useEffect(() => {
