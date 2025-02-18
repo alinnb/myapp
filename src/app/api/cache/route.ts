@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-    const r = await fetch("http://dog.ceo/api/breeds/image/random");
+    const r = await fetch("http://dog.ceo/api/breeds/image/random",{
+        cache: "force-cache",
+        next: {
+            tags: ["dog"],
+        },
+    });
     const data = await r.json();
-    const path = request.nextUrl.pathname;
     return NextResponse.json(data);
 }
 // /api/revalidateCache?path=/ =》校验 / 路径的缓存

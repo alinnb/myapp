@@ -2,6 +2,9 @@
 async function fetchImg () {
   const r = await (await fetch('http://dog.ceo/api/breeds/image/random', {
     cache: 'force-cache', 
+    next: {
+        tags: ["dog"],
+    },
   })).json()
   return r
 }
