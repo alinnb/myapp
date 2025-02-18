@@ -1,8 +1,11 @@
+import { cookies } from "next/headers";
 
-export const revalidate = 5;
+export default async function Page() {
+  const cookieStore = await cookies();
+  // 修复类型错误：cookies() 返回的是 ReadonlyRequestCookies 类型
+  const token = await cookieStore.get('token');
 
-export default function Home() {
-  console.log('toLocaleTimeString 😀');
+  console.log('toLocaleTimeString 😀', token);
   return (
     <div>
       <h1>{new Date().toLocaleTimeString()}</h1>
