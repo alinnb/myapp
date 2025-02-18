@@ -1,13 +1,19 @@
-import Link from "next/link";
-// 强制动态编译
-export const dynamic = 'force-dynamic';
+'use client'
+import { useRouter } from "next/navigation";
 
 export default function CacheLayout({ children }: { children: React.ReactNode }) {
+    const router = useRouter()
     return (
         <div>
             <div className="flex gap-3">
-                <Link href={'/news'}>新闻</Link>
-                <Link href={'/sports'}>体育</Link>
+                <span onClick={() => {
+                    router.push('/news')
+                    router.refresh()
+                }}>新闻</span>
+                <span onClick={() => {
+                    router.push('/sports')
+                    router.refresh()
+                }}>体育</span>
             </div>
             <div>
                 {children}
