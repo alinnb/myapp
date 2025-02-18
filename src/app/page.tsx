@@ -1,4 +1,6 @@
 
+export const revalidate = 5;
+
 export default function Home() {
   console.log('toLocaleTimeString 😀');
   return (
