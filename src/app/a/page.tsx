@@ -6,7 +6,7 @@ const fetchImg = async () => {
     const { signal } = new AbortController()
     const res = await fetch('http://dog.ceo/api/breeds/image/random', {
         signal,
-        cache: 'no-cache'
+        cache: 'force-cache'
     })
     const data = await res.json()
     return data
