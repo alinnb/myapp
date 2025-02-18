@@ -1,22 +1,21 @@
 'use client'
-import { useRouter } from "next/navigation";
+
+import Link from "next/link";
+import NavigationEvents from "../components/navigation-events";
+import { Suspense } from "react";
 
 export default function CacheLayout({ children }: { children: React.ReactNode }) {
-    const router = useRouter()
     return (
         <div>
-            <div className="flex gap-3">
-                <span onClick={() => {
-                    router.push('/news')
-                    router.refresh()
-                }}>新闻</span>
-                <span onClick={() => {
-                    router.push('/sports')
-                    router.refresh()
-                }}>体育</span>
+            <div className="flex gap-4">
+                <Link href={'/news'}>新闻</Link>
+                <Link href={'/sports'}>体育</Link>
             </div>
             <div>
                 {children}
+                <Suspense fallback={null}>
+                    <NavigationEvents />
+                </Suspense>
             </div>
         </div>
     );
