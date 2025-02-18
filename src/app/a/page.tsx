@@ -3,7 +3,9 @@ import { headers } from 'next/headers'
 import React from 'react'
 
 const fetchImg = async () => {
+    const { signal } = new AbortController()
     const res = await fetch('http://dog.ceo/api/breeds/image/random', {
+        signal,
         cache: 'no-cache'
     })
     const data = await res.json()
