@@ -1,12 +1,9 @@
-import ClientComponent from './components/client-component'
-import ServerComponent from './components/server-component'
 
 export default function Home() {
+  console.log('toLocaleTimeString 😀');
   return (
     <div>
-      <ClientComponent>
-        <ServerComponent/>
-      </ClientComponent>
+      <h1>{new Date().toLocaleTimeString()}</h1>
     </div>
   );
 }
