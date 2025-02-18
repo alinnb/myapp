@@ -8,7 +8,14 @@ interface Todo {
 
 export default function Home() {
 
-  const [data, setData] = useState([])
+  const [data, setData] = useState([{
+    id: 1,
+    title: 'todo1'
+  }, {
+    id: 2,
+    title: 'todo2'
+  }]);
+  console.info(data, '😀');
   
   const fetchData = async () => {
     try {
