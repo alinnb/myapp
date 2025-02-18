@@ -1,14 +1,17 @@
 
+async function fetchImg () {
+  const r = await (await fetch('http://dog.ceo/api/breeds/image/random', {
+    cache: 'force-cache',
+  })).json()
+  return r
+}
 
 export default async function Page() {
-  const r = await(await fetch('https://jsonplaceholder.typicode.com/todos/1',{
-    cache: 'no-cache',
-  })).json()
-  console.log(r);
-  console.log('toLocaleTimeString 😀');
+  const img = await fetchImg()  
+  console.log('😀');
   return (
     <div>
-      <h1>{new Date().toLocaleTimeString()}</h1>
+      <img src={img.message} alt="Random dog" />
     </div>
   );
 }
