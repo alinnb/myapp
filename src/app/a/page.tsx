@@ -1,3 +1,5 @@
+
+import { headers } from 'next/headers'
 import React from 'react'
 
 const fetchImg = async () => {
@@ -10,6 +12,8 @@ export default async function Page() {
     const obj1 = await fetchImg()
     const obj2 = await fetchImg()
     const obj3 = await fetchImg()
+    // await headers() 会让页面变成动态页面
+    await headers()
     console.log('😀')
     return (
         <div className='flex'>
