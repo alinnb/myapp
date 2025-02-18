@@ -1,8 +1,7 @@
 import React from 'react'
-import fs from 'fs'
+import 'server-only'
 
 export default function ServerComponent() {
-    fs
   return (
     <div>serverComponent</div>
   )
