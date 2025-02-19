@@ -8,8 +8,9 @@ export async function getTodo() {
     return data
 }
 
-export async function addTodo(fromData: FormData) {
+export async function addTodo(userId:string, fromData: FormData) {
     const rawFormdata = Object.fromEntries(fromData)
+    console.log(userId)
     console.log(rawFormdata)
 
     data.push(rawFormdata.todo as string)
