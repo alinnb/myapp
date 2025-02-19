@@ -3,48 +3,69 @@
 import { revalidatePath } from "next/cache"
 import { FormState, RedFormData } from '@/app/type'
 import { sleep } from "@/app/utils"
+import { z } from 'zod'
+
+// 定义表单验证 schema
+const formSchema = z.object({
+    name: z.string()
+        .min(1, '姓名不能为空')
+        .max(4, '姓名不能超过4个字符'),
+    email: z.string()
+        .min(1, '邮箱不能为空')
+        .email('邮箱格式不正确'),
+    phone: z.string()
+        .min(1, '手机号不能为空')
+        .regex(/^1[3-9]\d{9}$/, '手机号格式不正确'),
+    age: z.number()
+        .min(0, '年龄不能小于0岁')
+        .max(150, '年龄不能超过150岁'),
+    gender: z.enum(['male', 'female', 'other'], {
+        errorMap: () => ({ message: '请选择有效的性别' })
+    }),
+    occupation: z.string()
+        .min(1, '职业不能为空')
+        .max(50, '职业名称过长'),
+    interests: z.array(z.string()),
+    address: z.object({
+        street: z.string().min(1, '街道地址不能为空'),
+        city: z.string().min(1, '城市不能为空'),
+        country: z.string().min(1, '国家不能为空'),
+        postalCode: z.string().min(1, '邮政编码不能为空'),
+    }),
+    newsletter: z.boolean(),
+    comments: z.string().optional(),
+})
 
 let redFormData: FormData = {} as FormData
 
 export async function submitRedFormAction(prevState: FormState,
     formData: FormData
 ): Promise<FormState> {
-    // 重新验证数据
     revalidatePath('/')
-
     sleep(30000)
 
     try {
-        // 验证必填字段
-        const name = formData.get('name')
-        const email = formData.get('email')
-        const phone = formData.get('phone')
-        const age = formData.get('age')
-        const gender = formData.get('gender')
-        const occupation = formData.get('occupation')
-
-        // 验证必填字段是否存在
-        if (!name || !email || !phone || !age || !gender || !occupation) {
-            throw new Error('必填字段不能为空')
+        // 从 FormData 构建数据对象
+        const data = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            age: Number(formData.get('age')),
+            gender: formData.get('gender'),
+            occupation: formData.get('occupation'),
+            interests: formData.getAll('interests'),
+            address: {
+                street: formData.get('address.street'),
+                city: formData.get('address.city'),
+                country: formData.get('address.country'),
+                postalCode: formData.get('address.postalCode'),
+            },
+            newsletter: formData.get('newsletter') === 'true',
+            comments: formData.get('comments'),
         }
 
-        // 验证邮箱格式
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        if (!emailRegex.test(email.toString())) {
-            throw new Error('邮箱格式不正确')
-        }
-
-        // 验证手机号格式（中国大陆手机号）
-        const phoneRegex = /^1[3-9]\d{9}$/
-        if (!phoneRegex.test(phone.toString())) {
-            throw new Error('手机号格式不正确')
-        }
-
-        // 验证年龄范围
-        const ageNum = Number(age)
-        if (isNaN(ageNum) || ageNum < 0 || ageNum > 150) {
-            throw new Error('年龄必须在 0-150 之间')
-        }
+        // 使用 Zod 验证数据
+        const validatedData = formSchema.parse(data)
         
         // 保存表单数据
         redFormData = formData
@@ -56,9 +77,18 @@ export async function submitRedFormAction(prevState: FormState,
             status: 'success',
         }
     } catch (error) {
+        if (error instanceof z.ZodError) {
+            // 获取第一个错误信息
+            const firstError = error.errors[0]
+            return {
+                message: '',
+                error: firstError.message,
+                status: 'error'
+            }
+        }
         return {
             message: '',
-            error: error instanceof Error ? error.message : '处理失败',
+            error: '处理失败',
             status: 'error'
         }
     }
