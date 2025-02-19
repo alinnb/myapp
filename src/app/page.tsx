@@ -7,9 +7,9 @@ export default async function Page() {
 
   return (
     <div className="p-10">
-      <form action={addTodo}>
+      <form>
         <input type="text" name="todo" className="border p-2"/>
-        <button type="submit" className="border p-2">提交</button>
+        <button formAction={addTodo} type="submit" className="border p-2">提交</button>
       </form>
       <ul className='leading-8 mt-4'>
         {data.map((item, index) => (
